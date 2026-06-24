@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOM - Secure P2P Dispatch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="db.js"></script>
+    <style>
+        body { background-color: #030712; color: #f3f4f6; }
+        .glass-panel { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
+        .chat-bg { background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.02), transparent 80%); }
+        /* Custom scrollbar for message thread */
+        .msg-scroll::-webkit-scrollbar { width: 4px; }
+        .msg-scroll::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+    </style>
+</head>
+<body class="font-sans antialiased h-screen flex flex-col overflow-hidden">
+
+    <nav class="flex-shrink-0 glass-panel border-b border-gray-800 px-6 py-3.5 flex justify-between items-center z-50">
+        <div class="flex items-center space-x-3">
+            <div class="h-8 w-8 bg-gradient-to-tr from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">∀</div>
+            <span class="text-base font-bold tracking-wider text-white">AXIOM <span class="text-xs font-mono text-cyan-400 ml-2">DISPATCH</span></span>
+        </div>
+        <div class="flex items-center space-x-6 text-sm font-medium text-gray-400">
+            <a href="feed.html" class="hover:text-white transition">Feed</a>
+            <a href="create.html" class="hover:text-white transition">Forge</a>
+            <a href="messages.html" class="text-cyan-400 font-bold border-b border-cyan-400 pb-1">Messages</a>
+            <a href="settings.html" class="hover:text-white transition">Settings</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex overflow-hidden max-w-7xl w-full mx-auto p-2 md:p-4 gap-4">
+
+        <aside class="w-full md:w-80 flex-shrink-0 glass-panel rounded-2xl flex flex-col border border-gray-800 overflow-hidden hidden md:flex">
+            <div class="p-4 border-b border-gray-800/80 space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold font-mono tracking-wider text-gray-400 uppercase">Active Channels</span>
+                    <span class="text-[10px] font-mono bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20">Secure P2P</span>
+                </div>
+                <div class="relative">
+                    <input type="text" placeholder="Filter node connections..." class="w-full bg-gray-900/80 border border-gray-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    <span class="absolute left-2.5 top-2 text-xs">🔍</span>
+                </div>
+            </div>
+
+            <div class="flex-grow overflow-y-auto divide-y divide-gray-800/50 text-xs">
+                
+                <div class="p-3.5 bg-gray-900/60 border-l-2 border-cyan-400 flex items-center space-x-3 cursor-pointer select-none">
+                    <div class="relative">
+                        <img src="1001496567.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'" class="h-10 w-10 rounded-full object-cover border border-cyan-400/50">
+                        <div class="absolute bottom-0 right-0 h-2.5 w-2.5 bg-emerald-400 rounded-full border-2 border-gray-950"></div>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h4 class="font-bold text-white truncate">Boye Nedict</h4>
+                            <span class="text-[9px] font-mono text-cyan-400">18:29</span>
+                        </div>
+                        <p class="text-gray-400 text-[11px] truncate">Shared an encrypted schematic...</p>
+                    </div>
+                </div>
+
+                <div class="p-3.5 hover:bg-gray-900/20 transition flex items-center space-x-3 cursor-pointer select-none">
+                    <div class="h-10 w-10 rounded-full bg-purple-900/60 border border-purple-500/30 flex items-center justify-center font-bold text-purple-300">MA</div>
+                    <div class="flex-grow min-w-0">
+                        <div class="flex justify-between items-baseline mb-1">
+                            <h4 class="font-medium text-gray-300 truncate">Dr. Mary Adedoyin</h4>
+                            <span class="text-[9px] font-mono text-gray-600">Yesterday</span>
+                        </div>
+                        <p class="text-gray-500 text-[11px] truncate">Please check the telemetry parse logs.</p>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <section class="flex-grow glass-panel rounded-2xl flex flex-col border border-gray-800 overflow-hidden chat-bg relative">
+            
+            <header class="p-4 bg-gray-950/60 border-b border-gray-800 flex items-center justify-between z-10">
+                <div class="flex items-center space-x-3">
+                    <button class="md:hidden text-gray-400 hover:text-white mr-1">←</button>
+                    <img src="1001496567.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'" class="h-9 w-9 rounded-full object-cover border border-gray-700">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h3 class="text-xs font-bold text-white">Boye Nedict</h3>
+                            <span class="h-1.5 w-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-mono">Mechatronics Node • Ref: #0JZSVMKM</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <a href="onboarding.html" class="px-3 py-1.5 bg-gray-900 hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-800 rounded-lg text-xs font-medium transition flex items-center space-x-1">
+                        <span>👤</span> <span>View Profile</span>
+                    </a>
+                    <button class="p-1.5 text-gray-500 hover:text-gray-300 rounded-lg">⋮</button>
+                </div>
+            </header>
+
+            <div class="flex-grow overflow-y-auto p-4 md:p-6 space-y-4 msg-scroll flex flex-col justify-start">
+                
+                <div class="text-center my-2 font-mono">
+                    <span class="text-[9px] bg-gray-900/80 text-gray-500 px-2.5 py-1 rounded-full border border-gray-800">
+                        SUNDAY, 7 JUN, 18:29 WAT
+                    </span>
+                </div>
+
+                <div class="flex items-end space-x-2 max-w-md">
+                    <div class="h-7 w-7 rounded-full bg-gray-800 flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-gray-400">BN</div>
+                    <div class="bg-gray-900 border border-gray-800/80 rounded-2xl rounded-bl-sm p-3.5 text-xs text-gray-200 space-y-1 shadow-md">
+                        <p>Hey Bright, I looked over the 3-way board logic you pushed for ECE 220. Sourcing those 18650 battery enclosures locally is going to be tough this week.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-end space-x-2 max-w-md">
+                    <div class="h-7 w-7 rounded-full bg-transparent flex-shrink-0"></div> <div class="bg-gray-900 border border-gray-800/80 rounded-2xl p-3.5 text-xs text-gray-200 space-y-2 shadow-md w-full">
+                        <p>Use this alternative supplier link, they have the high-drain cells in stock:</p>
+                        
+                        <div class="bg-gradient-to-r from-blue-900/40 to-indigo-900/40 border border-blue-500/30 rounded-xl p-3 hover:border-blue-500/60 transition cursor-pointer">
+                            <span class="text-[10px] font-mono text-cyan-400 block font-bold mb-0.5">https://www.k-costa.top/register?ref=0JZSVMKM</span>
+                            <span class="font-bold text-white text-xs block">KCOSTA - Hardware Dispatch Gateway</span>
+                            <span class="text-[10px] text-gray-400 block mt-1">Verified Edge Distributor Node</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-end justify-end space-x-2 self-end max-w-md">
+                    <div class="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-400/30 rounded-2xl rounded-br-sm p-3.5 text-xs text-cyan-100 shadow-lg">
+                        <p>Absolute lifesaver Boye. Snagging 10 units right now before the mid-semester rush clears them out. Sending over the updated schematic hash in a sec.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-end justify-end space-x-2 self-end max-w-lg">
+                    <div class="bg-gray-950 border border-cyan-500/40 rounded-2xl rounded-br-sm p-3 text-xs text-gray-300 space-y-1.5 w-full shadow-xl font-mono">
+                        <div class="flex justify-between items-center text-[10px] text-gray-500 border-b border-gray-800 pb-1 px-1">
+                            <span class="text-cyan-400">main_switch.cpp</span>
+                            <span>C++ (ESP32 Core)</span>
+                        </div>
+                        <pre class="text-[11px] text-emerald-400 overflow-x-auto p-1"><code>pinMode(MAIN_RELAY_PIN, OUTPUT);
+digitalWrite(MAIN_RELAY_PIN, HIGH); // Assert 5V safe</code></pre>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="px-6 py-2 bg-gray-950/90 border-t border-gray-900/80 text-center flex-shrink-0">
+                <p class="text-[10px] text-gray-500 font-mono tracking-tight flex items-center justify-center space-x-1">
+                    <span>🔒</span> 
+                    <span>New transmissions and code dispatches are secured with end-to-end peer encryption.</span>
+                    <a href="#" class="text-cyan-400 underline hover:text-cyan-300 ml-1 font-sans font-semibold">Learn more</a>
+                </p>
+            </div>
+
+            <footer class="p-3 bg-gray-900/60 border-t border-gray-800 flex items-center space-x-2 z-10">
+                <div class="flex items-center space-x-1 text-gray-400">
+                    <button class="p-2 hover:text-white hover:bg-gray-800 rounded-lg transition" title="Attach CAD / Gerber File">📎</button>
+                    <button class="p-2 hover:text-white hover:bg-gray-800 rounded-lg transition" title="Insert Code Block">💻</button>
+                </div>
+                
+                <input type="text" placeholder="Dispatch encrypted payload to Boye..." class="flex-grow bg-gray-950 border border-gray-800/80 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 transition">
+                
+                <button class="h-9 w-9 bg-cyan-400 hover:bg-cyan-300 text-black rounded-xl flex items-center justify-center font-bold text-sm shadow-md transition flex-shrink-0">
+                    ↑
+                </button>
+            </footer>
+
+        </section>
+
+    </main>
+
+</body>
+  </html>
+          
