@@ -3,57 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AXIOM - Advancing eXcellence, Innovation, Opportunity & Mastery</title>
+    <title>AXIOM | Engineering OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #030712; color: #f3f4f6; }
-        .glass-panel { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .hero-glow { background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.15), transparent 60%); }
+        .glass-panel { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen flex flex-col justify-between overflow-x-hidden relative">
+<body class="font-sans antialiased">
 
-    <div class="absolute inset-0 hero-glow pointer-events-none z-0"></div>
+    <div id="splash-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#030712] transition-opacity duration-700">
+        <div class="animate-pulse">
+            <div class="h-20 w-20 bg-gradient-to-tr from-cyan-400 to-blue-600 rounded-2xl flex items-center justify-center font-bold text-black text-3xl shadow-[0_0_50px_rgba(6,182,212,0.3)]">∀</div>
+        </div>
+        <p class="mt-8 text-gray-500 text-xs font-mono tracking-widest">INITIALIZING AXIOM...</p>
+    </div>
 
-    <nav class="sticky top-0 z-50 glass-panel border-b border-gray-800 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-            <div class="h-9 w-9 bg-gradient-to-tr from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center font-bold text-black text-lg shadow-lg shadow-cyan-500/20">∀</div>
-            <span class="text-xl font-bold tracking-wider text-white">AXIOM</span>
-        </div>
-        <div class="flex items-center space-x-4">
-            <a href="onboarding.html" class="px-4 py-2 text-sm font-semibold text-black bg-cyan-400 rounded-md shadow-lg shadow-cyan-500/10 hover:bg-cyan-300 transition">
-                Initialize Console
-            </a>
-        </div>
-    </nav>
-
-    <main class="max-w-4xl mx-auto px-4 text-center py-20 z-10 flex-grow flex flex-col justify-center items-center space-y-6">
-        <div class="space-y-2">
-            <span class="text-xs font-mono tracking-[0.3em] uppercase text-cyan-400">The Professional Engine for Engineers</span>
-            <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white leading-none">
-                Advancing eXcellence, <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Innovation & Mastery</span>
-            </h1>
-        </div>
-        
-        <p class="text-sm text-gray-400 max-w-xl leading-relaxed">
-            Secure, decentralized project versioning, cryptographic asset proofing, and verification matching frameworks tailored specifically for engineers.
-        </p>
-
-        <div class="pt-4 flex flex-wrap gap-4 justify-center">
-            <a href="onboarding.html" class="px-6 py-3 font-bold text-sm bg-gradient-to-r from-cyan-400 to-blue-500 text-black rounded-xl hover:opacity-90 transition shadow-xl shadow-cyan-500/5">
-                Onboard Identity Track
-            </a>
-            <a href="feed.html" class="px-6 py-3 font-bold text-sm bg-gray-900 border border-gray-800 text-gray-300 rounded-xl hover:text-white transition">
-                Access Network Feed
-            </a>
-        </div>
+    <main class="min-h-screen flex flex-col items-center justify-center text-center p-6">
+        <h1 class="text-4xl font-bold mb-4 tracking-tight">AXIOM</h1>
+        <p class="text-gray-400 mb-8 max-w-sm">The global engineering operating system for verified innovation.</p>
+        <a href="feed.html" class="px-8 py-3 bg-cyan-400 text-black font-bold rounded-xl hover:bg-cyan-300 transition">Enter Workspace</a>
     </main>
 
-    <footer class="border-t border-gray-900/60 bg-gray-950/40 py-6 px-6 text-center text-xs text-gray-600 font-mono z-10">
-        <div>AXIOM Engine Architecture Node • Local Sandbox Environment Active</div>
-    </footer>
+    <div id="ai-widget-container" class="fixed bottom-6 right-6 z-50">
+        <button id="ai-trigger" onclick="toggleAI()" class="h-14 w-14 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full shadow-lg shadow-cyan-500/30 flex items-center justify-center text-xl text-white hover:scale-105 transition">⚡</button>
+        <div id="ai-modal" class="hidden absolute bottom-20 right-0 w-80 md:w-96 glass-panel border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center">
+                <span class="text-xs font-bold text-cyan-400 font-mono tracking-wider">ASK AXIOM</span>
+                <button onclick="toggleAI()" class="text-gray-500 hover:text-white">✕</button>
+            </div>
+            <div id="ai-chat-window" class="h-64 overflow-y-auto p-4 space-y-3 bg-gray-950/20">
+                <div class="text-[11px] text-gray-400 bg-gray-900 p-3 rounded-lg">Hello. I am the AXIOM Engineering Assistant. How can I help?</div>
+            </div>
+            <div class="p-3 border-t border-gray-800">
+                <input type="text" id="ai-input" onkeypress="handleEnter(event)" placeholder="Ask about schematics..." class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+            </div>
+        </div>
+    </div>
 
+    <script>
+        // Splash Logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('splash-screen').style.opacity = '0';
+                setTimeout(() => { document.getElementById('splash-screen').style.display = 'none'; }, 700);
+            }, 1500);
+        });
+
+        // AI Logic
+        function toggleAI() { document.getElementById('ai-modal').classList.toggle('hidden'); }
+        async function handleEnter(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('ai-input');
+                const window = document.getElementById('ai-chat-window');
+                if (!input.value) return;
+                window.innerHTML += `<div class="text-[11px] text-white bg-cyan-600/20 p-3 rounded-lg text-right">${input.value}</div>`;
+                input.value = '';
+                window.innerHTML += `<div id="loader" class="text-[10px] text-gray-500 p-2">AXIOM is processing...</div>`;
+                await new Promise(r => setTimeout(r, 1000));
+                document.getElementById('loader').remove();
+                window.innerHTML += `<div class="text-[11px] text-gray-300 bg-gray-900 p-3 rounded-lg mt-2">Engineering verification complete. Logic is stable.</div>`;
+                window.scrollTop = window.scrollHeight;
+            }
+        }
+    </script>
 </body>
-              </html>
-              
+</html>
