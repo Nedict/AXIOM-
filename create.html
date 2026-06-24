@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOM - Forge Content Cluster</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="db.js"></script>
+    <style>
+        body { background-color: #030712; color: #f3f4f6; }
+        .glass-panel { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        input[type="radio"]:checked + label { border-color: #00f2fe; color: #00f2fe; background: rgba(0, 242, 254, 0.05); }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen pb-12">
+
+    <nav class="sticky top-0 z-50 glass-panel border-b border-gray-800 px-6 py-4 flex justify-between items-center mb-8">
+        <div class="flex items-center space-x-3">
+            <div class="h-8 w-8 bg-gradient-to-tr from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">∀</div>
+            <span class="text-lg font-bold tracking-wider text-white">AXIOM</span>
+        </div>
+        <div class="flex items-center space-x-6 text-sm font-medium text-gray-400">
+            <a href="feed.html" class="hover:text-white transition">Feed</a>
+            <a href="create.html" class="text-cyan-400 font-bold border-b border-cyan-400 pb-1">Forge</a>
+            <a href="settings.html" class="hover:text-white transition">Settings</a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl w-full mx-auto px-4">
+        <div class="glass-panel rounded-2xl p-6 md:p-8 border border-gray-800 space-y-8">
+            
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-white">Forge New Content</h1>
+                <p class="text-xs text-gray-400 mt-1">Select your publication cluster vector. The interface engine adapts immediately to your data type requirements.</p>
+            </div>
+
+            <div>
+                <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3">Content Type *</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    
+                    <input type="radio" id="type-post" name="content-type" value="post" checked onclick="switchFormContext('post')" class="hidden">
+                    <label for="type-post" class="border border-gray-800 rounded-xl px-4 py-3 text-xs font-bold text-center cursor-pointer transition block hover:border-gray-700 select-none">
+                        ◉ Post
+                    </label>
+
+                    <input type="radio" id="type-project" name="content-type" value="project" onclick="switchFormContext('project')" class="hidden">
+                    <label for="type-project" class="border border-gray-800 rounded-xl px-4 py-3 text-xs font-bold text-center cursor-pointer transition block hover:border-gray-700 select-none">
+                        ◯ Project
+                    </label>
+
+                    <input type="radio" id="type-paper" name="content-type" value="paper" onclick="switchFormContext('paper')" class="hidden">
+                    <label for="type-paper" class="border border-gray-800 rounded-xl px-4 py-3 text-xs font-bold text-center cursor-pointer transition block hover:border-gray-700 select-none">
+                        ◯ Research Paper
+                    </label>
+
+                    <input type="radio" id="type-job" name="content-type" value="job" onclick="switchFormContext('job')" class="hidden">
+                    <label for="type-job" class="border border-gray-800 rounded-xl px-4 py-3 text-xs font-bold text-center cursor-pointer transition block hover:border-gray-700 select-none">
+                        ◯ Job Slot
+                    </label>
+                </div>
+            </div>
+
+            <hr class="border-gray-800/60">
+
+            <form id="publishing-form" onsubmit="handlePublish(event)" class="space-y-6">
+                
+                <div>
+                    <label id="title-label" class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Title *</label>
+                    <input type="text" id="content-title" required placeholder="Give your entry a precise identifier..." class="w-full bg-gray-900/40 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
+                </div>
+
+                <div id="fields-project" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 border border-cyan-500/10 p-4 rounded-xl bg-cyan-500/[0.01]">
+                    <div class="sm:col-span-2 text-xs font-bold text-cyan-400 font-mono">Project Parameters</div>
+                    <div>
+                        <input type="text" id="proj-tools" placeholder="Tools Used (e.g. SolidWorks, ESP32)" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <input type="text" id="proj-team" placeholder="Team Members (Optional)" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <input type="url" id="proj-repo" placeholder="GitHub Repository Link" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <input type="url" id="proj-demo" placeholder="Live Demo Preview URL" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                </div>
+
+                <div id="fields-paper" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 border border-purple-500/10 p-4 rounded-xl bg-purple-500/[0.01]">
+                    <div class="sm:col-span-2 text-xs font-bold text-purple-400 font-mono">Academic Identity Registry</div>
+                    <div>
+                        <input type="text" id="paper-authors" placeholder="Authors (e.g. B. Bright, Dr. M. Adedoyin)" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400">
+                    </div>
+                    <div>
+                        <input type="text" id="paper-inst" placeholder="Publishing Institution Name" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <input type="text" id="paper-doi" placeholder="Digital Object Identifier (DOI) (Optional)" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400">
+                    </div>
+                </div>
+
+                <div id="fields-job" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 border border-emerald-500/10 p-4 rounded-xl bg-emerald-500/[0.01]">
+                    <div class="sm:col-span-2 text-xs font-bold text-emerald-400 font-mono">Job Specifications</div>
+                    <div>
+                        <input type="text" id="job-loc" placeholder="Geographic Location (or Remote)" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400">
+                    </div>
+                    <div>
+                        <select id="job-type" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400">
+                            <option value="Full-time">Full-time Position</option>
+                            <option value="Part-time">Part-time Track</option>
+                            <option value="Internship">Internship Slot</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="text" id="job-salary" placeholder="Salary Range Indicator ($ / Year)" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400">
+                    </div>
+                    <div>
+                        <input type="date" id="job-deadline" class="w-full bg-gray-900/60 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400">
+                    </div>
+                </div>
+
+                <div>
+                    <label id="desc-label" class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Description *</label>
+                    <div class="flex flex-wrap gap-1 border border-gray-800 border-b-0 bg-gray-900/40 p-2 rounded-t-xl text-xs text-gray-400 font-mono">
+                        <button type="button" class="px-2 py-0.5 hover:text-white font-bold">B</button>
+                        <button type="button" class="px-2 py-0.5 hover:text-white italic">I</button>
+                        <span class="text-gray-700">|</span>
+                        <button type="button" class="px-2 py-0.5 hover:text-white">[Code]</button>
+                    </div>
+                    <textarea id="content-desc" required maxlength="10000" rows="5" placeholder="Document technical specifications, system layers, or role requirements..." class="w-full bg-gray-900/20 border border-gray-800 rounded-b-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Engineering Category</label>
+                        <input type="text" id="meta-category" placeholder="e.g. Renewable Energy, Mechatronics" class="w-full bg-gray-900/40 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Tags</label>
+                        <input type="text" id="meta-tags" placeholder="#Automation #ESP32 #CleanEnergy" class="w-full bg-gray-900/40 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 border-t border-gray-800 pt-6">
+                    <button type="button" class="px-4 py-2 text-xs font-semibold text-gray-400 hover:text-white transition">Save Draft</button>
+                    <button type="submit" class="px-6 py-2.5 text-xs font-bold text-black bg-cyan-400 rounded-lg hover:bg-cyan-300 shadow-lg shadow-cyan-500/10 transition">
+                        Publish Content Matrix
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const subContexts = ['project', 'paper', 'job'];
+        let chosenContext = 'post';
+
+        function switchFormContext(context) {
+            chosenContext = context;
+            subContexts.forEach(blk => {
+                document.getElementById(`fields-${blk}`).classList.add('hidden');
+            });
+
+            const titleLabel = document.getElementById('title-label');
+            const descLabel = document.getElementById('desc-label');
+
+            if (context === 'project') {
+                document.getElementById('fields-project').classList.remove('hidden');
+                titleLabel.innerText = "Project Title *";
+                descLabel.innerText = "Project Technical Summary *";
+            } else if (context === 'paper') {
+                document.getElementById('fields-paper').classList.remove('hidden');
+                titleLabel.innerText = "Research Paper Title *";
+                descLabel.innerText = "Abstract Overview *";
+            } else if (context === 'job') {
+                document.getElementById('fields-job').classList.remove('hidden');
+                titleLabel.innerText = "Job Position Title *";
+                descLabel.innerText = "Position Duties & Requirements *";
+            } else {
+                titleLabel.innerText = "Title *";
+                descLabel.innerText = "Description *";
+            }
+        }
+
+        function handlePublish(e) {
+            e.preventDefault();
+            
+            const payload = {
+                id: "item_" + Date.now(),
+                type: chosenContext,
+                title: document.getElementById('content-title').value,
+                description: document.getElementById('content-desc').value,
+                category: document.getElementById('meta-category').value,
+                tags: document.getElementById('meta-tags').value,
+                timestamp: new Date().toLocaleDateString('en-GB') // Preserving explicit DD/MM/YYYY target template
+            };
+
+            if (typeof AxiomDB !== 'undefined') {
+                const state = AxiomDB.get();
+                if (chosenContext === 'project') {
+                    state.projects.push(payload);
+                } else {
+                    state.posts.push(payload);
+                }
+                AxiomDB.save(state);
+            }
+
+            window.location.href = "feed.html";
+        }
+    </script>
+</body>
+                      </html>
+                      
