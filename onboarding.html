@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOM Onboarding Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="db.js"></script>
+    <style>
+        body { background-color: #030712; color: #f3f4f6; }
+        .glass-panel { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .step-node.active { background-color: #00f2fe; box-shadow: 0 0 15px #00f2fe; color: #000; }
+        .step-node.completed { background-color: #10b981; color: #fff; }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <nav class="glass-panel border-b border-gray-800 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="h-8 w-8 bg-gradient-to-tr from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">∀</div>
+            <span class="text-lg font-bold tracking-wider text-white">AXIOM</span>
+        </div>
+        <div class="flex items-center space-x-2">
+            <span class="text-xs text-gray-400">Profile Strength:</span>
+            <span id="strength-badge" class="text-xs font-bold text-cyan-400 bg-cyan-400/10 px-2.5 py-1 rounded-full border border-cyan-400/20">0%</span>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl w-full mx-auto px-4 mt-6">
+        <div class="flex justify-between items-center relative">
+            <div class="absolute left-0 right-0 top-1/2 h-0.5 bg-gray-800 -z-10"></div>
+            <div id="node-1" class="step-node active w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold bg-gray-900 border border-gray-700 transition">1</div>
+            <div id="node-2" class="step-node w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold bg-gray-900 border border-gray-700 transition">2</div>
+            <div id="node-3" class="step-node w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold bg-gray-900 border border-gray-700 transition">3</div>
+            <div id="node-4" class="step-node w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold bg-gray-900 border border-gray-700 transition">4</div>
+        </div>
+    </div>
+
+    <main class="max-w-2xl w-full mx-auto px-4 py-8 flex-grow">
+        <form id="onboarding-form" oninput="calculateStrength()" class="glass-panel rounded-2xl p-6 md:p-8 border border-gray-800 space-y-6">
+            
+            <div id="step-layer-1" class="step-layer space-y-5">
+                <div>
+                    <h2 class="text-xl font-bold text-white">Basic Personal Credentials</h2>
+                    <p class="text-xs text-gray-400 mt-1">Set up your secure engineering network profile identity matrix.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-2">First Name *</label>
+                        <input type="text" id="first-name" required class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-2">Last Name *</label>
+                        <input type="text" id="last-name" required class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-2">Username *</label>
+                        <input type="text" id="username" required class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-2">Email Address *</label>
+                        <input type="email" id="email" required class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-2">What Engineer Are You? *</label>
+                    <select id="discipline" required class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
+                        <option value="" disabled selected class="text-gray-500">Select your core tracking cluster...</option>
+                        <option value="Mechanical Engineering">Mechanical Engineer</option>
+                        <option value="Civil Engineering">Civil Engineer</option>
+                        <option value="Mechatronics Engineering">Mechatronics Engineer</option>
+                        <option value="Electrical Engineering">Electrical/Electronics Engineer</option>
+                        <option value="Renewable Energy">Renewable Energy Engineer</option>
+                        <option value="Aerospace Engineering">Aerospace Engineer</option>
+                        <option value="AI Engineering">Artificial Intelligence Engineer</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-2">Professional Summary</label>
+                    <textarea id="summary" rows="3" placeholder="Briefly showcase your engineering focus or academic objectives..." class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 transition"></textarea>
+                </div>
+            </div>
+
+            <div id="step-layer-2" class="step-layer hidden space-y-5">
+                <div>
+                    <h2 class="text-xl font-bold text-white">Academic History & Credentials</h2>
+                    <p class="text-xs text-gray-400 mt-1">Provide your verified institutional timelines.</p>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-2">Institution Name</label>
+                    <input type="text" id="edu-inst" class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-2">Degree / Qualification</label>
+                        <input type="text" id="edu-deg" placeholder="B.Eng, B.Sc, Diploma..." class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold
+  
