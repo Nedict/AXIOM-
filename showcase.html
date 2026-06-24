@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXIOM - Project Vault Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="db.js"></script>
+    <style>
+        body { background-color: #030712; color: #f3f4f6; }
+        .glass-panel { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
+        .tab-btn.active { border-color: #00f2fe; color: #00f2fe; background: rgba(0, 242, 254, 0.05); }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen pb-12">
+
+    <nav class="sticky top-0 z-50 glass-panel border-b border-gray-800 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="h-8 w-8 bg-gradient-to-tr from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">∀</div>
+            <span class="text-lg font-bold tracking-wider text-white">AXIOM</span>
+        </div>
+        <div class="flex items-center space-x-6 text-sm font-medium text-gray-400">
+            <a href="feed.html" class="hover:text-white transition">Home Feed</a>
+            <span class="text-cyan-400 font-bold border-b border-cyan-400 pb-1">Project Showcase</span>
+            <a href="create.html" class="hover:text-white transition">Forge Content</a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 space-y-6">
+            <div class="glass-panel rounded-2xl p-6 border border-gray-800 space-y-4">
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-cyan-500/10 text-cyan-400 text-[10px] uppercase font-mono tracking-wider px-2.5 py-1 rounded border border-cyan-500/20">Embedded Systems</span>
+                    <span class="bg-purple-500/10 text-purple-400 text-[10px] uppercase font-mono tracking-wider px-2.5 py-1 rounded border border-purple-500/20">Telemetry Node</span>
+                </div>
+                <h1 class="text-2xl font-bold text-white tracking-tight">Automated Mobile Flood Risk Analysis Matrixing</h1>
+                <p class="text-sm text-gray-400 leading-relaxed">An environmental telemetry network deploying ultrasonic spatial vector sensors managed via custom edge logic parsing loops on solid-state microcontrollers.</p>
+                <div class="flex flex-wrap gap-4 text-xs text-gray-500 pt-2 border-t border-gray-800/60 font-mono">
+                    <div>Project Node ID: <span class="text-gray-300">p_v1_flood_node</span></div>
+                    <div>SHA-256 Stamp: <span class="text-cyan-400">9b2e...c4a1</span></div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl overflow-hidden border border-gray-800">
+                <div class="flex border-b border-gray-800 text-xs font-bold text-gray-400 bg-gray-900/20">
+                    <button onclick="switchTab('spec')" id="tab-spec" class="tab-btn active px-6 py-3.5 border-b-2 border-transparent transition">Technical Architecture</button>
+                    <button onclick="switchTab('cad')" id="tab-cad" class="tab-btn px-6 py-3.5 border-b-2 border-transparent transition">Simulation Field</button>
+                    <button onclick="switchTab('docs')" id="tab-docs" class="tab-btn px-6 py-3.5 border-b-2 border-transparent transition">Protected Documents (2)</button>
+                </div>
+                <div class="p-6">
+                    <div id="content-spec" class="tab-content space-y-4 text-xs text-gray-300 leading-relaxed">
+                        <h3 class="text-sm font-bold text-white">Edge System Architecture</h3>
+                        <p>This tracking assembly processes multi-echo acoustic sensor waves to trace environmental distance vectors over variable timeline parameters. Signal integrity is sustained through continuous, non-blocking asynchronous state loops.</p>
+                    </div>
+                    <div id="content-cad" class="tab-content hidden flex flex-col items-center justify-center h-44 bg-gray-950/40 border border-dashed border-gray-800 rounded-xl relative overflow-hidden">
+                        <span class="text-[10px] font-mono text-cyan-400 mb-2">[ SECURE WEBGL SENSOR SIMULATION ENGINE ]</span>
+                    </div>
+                    <div id="content-docs" class="tab-content hidden space-y-3">
+                        <div class="flex justify-between items-center border border-gray-800 bg-gray-900/20 p-3 rounded-lg text-xs">
+                            <div class="flex items-center space-x-2"><span>📄</span> <span class="font-bold text-white">mesh_sensor_schematic.pdf</span></div>
+                            <span class="bg-red-500/10 text-red-400 text-[9px] font-mono tracking-wider px-2 py-0.5 rounded uppercase">NDA Encrypted</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="space-y-6">
+            <div class="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
+                <span class="text-[11px] font-bold tracking-wider text-gray-400 uppercase block font-mono">Secure Access Keys</span>
+                <p class="text-xs text-gray-400">To pull source code modules, technical drawings, or raw test logs, click to route your authorization request payload.</p>
+                <button class="w-full py-2.5 font-bold text-xs bg-cyan-400 hover:bg-cyan-300 text-black rounded-lg transition shadow-lg">
+                    Request Secure Access Verification Link
+                </button>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        function switchTab(targetTab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`tab-${targetTab}`).classList.add('active');
+            document.getElementById(`content-${targetTab}`).classList.remove('hidden');
+        }
+    </script>
+</body>
+  </html>
+              
