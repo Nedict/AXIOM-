@@ -3,56 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AXIOM | Forge</title>
+    <title>AXIOM | Forge Node</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #030712; color: #f3f4f6; }
-        .glass-panel { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
-    </style>
 </head>
-<body class="font-sans antialiased">
+<body class="bg-slate-950 text-slate-100 min-h-screen p-6 md:p-12">
 
-    <main class="max-w-2xl mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-6">Forge Content</h1>
-        <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
-            <input type="text" placeholder="Project Title" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm text-white">
-            <textarea placeholder="Technical Description..." class="w-full h-32 bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm text-white"></textarea>
-            <button class="w-full bg-cyan-400 text-black font-bold py-3 rounded-lg">Publish Node</button>
+    <div class="max-w-2xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl space-y-6">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-white">Forge New Schematic</h1>
+                <p class="text-slate-500 text-sm">Commit system structures to cloud storage sync clusters</p>
+            </div>
+            <a href="index.html" class="text-slate-400 hover:text-white text-sm font-medium transition-colors">&larr; Dashboard</a>
         </div>
-    </main>
 
-    <div id="ai-widget-container" class="fixed bottom-6 right-6 z-50">
-        <button id="ai-trigger" onclick="toggleAI()" class="h-14 w-14 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-full shadow-lg shadow-cyan-500/30 flex items-center justify-center text-xl text-white hover:scale-105 transition">⚡</button>
-        <div id="ai-modal" class="hidden absolute bottom-20 right-0 w-80 md:w-96 glass-panel border border-gray-800 rounded-2xl overflow-hidden shadow-2xl">
-            <div class="p-4 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center">
-                <span class="text-xs font-bold text-cyan-400 font-mono tracking-wider">ASK AXIOM</span>
-                <button onclick="toggleAI()" class="text-gray-500 hover:text-white">✕</button>
+        <form class="space-y-6">
+            <div>
+                <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">Schematic Module Name</label>
+                <input type="text" id="title" required placeholder="e.g., Mobile Flood Detection Node" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-blue-500 text-sm transition-colors">
             </div>
-            <div id="ai-chat-window" class="h-64 overflow-y-auto p-4 space-y-3 bg-gray-950/20">
-                <div class="text-[11px] text-gray-400 bg-gray-900 p-3 rounded-lg">How can I help?</div>
+
+            <div>
+                <label class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">Technical Core Description</label>
+                <textarea id="description" rows="5" required placeholder="Outline layout operational thresholds, system wiring parameters, or structural features..." class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-blue-500 text-sm transition-colors resize-none"></textarea>
             </div>
-            <div class="p-3 border-t border-gray-800">
-                <input type="text" id="ai-input" onkeypress="handleEnter(event)" placeholder="Ask about schematics..." class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
-            </div>
-        </div>
+
+            <button type="submit" id="publish-btn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-sm transition-all shadow-lg shadow-blue-600/20">
+                Publish Node
+            </button>
+        </form>
     </div>
 
-    <script>
-        function toggleAI() { document.getElementById('ai-modal').classList.toggle('hidden'); }
-        async function handleEnter(e) {
-            if (e.key === 'Enter') {
-                const input = document.getElementById('ai-input');
-                const window = document.getElementById('ai-chat-window');
-                if (!input.value) return;
-                window.innerHTML += `<div class="text-[11px] text-white bg-cyan-600/20 p-3 rounded-lg text-right">${input.value}</div>`;
-                input.value = '';
-                window.innerHTML += `<div id="loader" class="text-[10px] text-gray-500 p-2">AXIOM is processing...</div>`;
-                await new Promise(r => setTimeout(r, 1000));
-                document.getElementById('loader').remove();
-                window.innerHTML += `<div class="text-[11px] text-gray-300 bg-gray-900 p-3 rounded-lg mt-2">Forge ready.</div>`;
-                window.scrollTop = window.scrollHeight;
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const publishBtn = document.getElementById('publish-btn');
+            const titleInput = document.getElementById('title');
+            const descInput = document.getElementById('description');
+
+            if (publishBtn) {
+                publishBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    const title = titleInput.value.trim();
+                    const description = descInput.value.trim();
+
+                    if (!title) {
+                        alert("Validation Error: Title property cannot be null.");
+                        return;
+                    }
+
+                    publishBtn.innerText = "Forging Data Nodes...";
+                    publishBtn.disabled = true;
+
+                    try {
+                        const { error } = await supabase
+                            .from('projects')
+                            .insert([{ title, description }]);
+
+                        if (error) throw error;
+
+                        window.location.href = 'index.html';
+                    } catch (err) {
+                        alert("Cloud Commit Blocked: " + err.message);
+                        publishBtn.innerText = "Publish Node";
+                        publishBtn.disabled = false;
+                    }
+                });
             }
-        }
+        });
     </script>
 </body>
 </html>
